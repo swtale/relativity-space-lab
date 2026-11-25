@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b0f19" />
+  <title>Relativity Space Lab — 특수 상대성 실험실</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Relativity Space Lab 홈"><span class="brand-mark">✳</span><span><b>RELATIVITY</b><small>SPACE LAB <i>•</i> 특수 상대성 실험실</small></span></a>
+      <nav class="main-nav" aria-label="실험 단계">
+        <button class="nav-step active" data-view="setup"><span>01</span> 객체 설정</button>
+        <button class="nav-step" data-view="simulation"><span>02</span> 관측 시뮬레이션</button>
+        <button class="nav-step" data-view="theory"><span>03</span> 공식 & 해설</button>
+      </nav>
+      <div class="live-status"><span class="live-dot"></span> 실험 준비 완료</div>
+    </header>
+
+    <main>
+      <section class="intro-row"><div><p class="eyebrow">SPECIAL RELATIVITY / INTERACTIVE LAB</p><h1>시점이 바뀌면, <span>우주가 다르게 보입니다.</span></h1><p class="intro-copy">속도를 설정하고 관측자를 바꿔 보세요. 시간 지연과 길이 수축을 직접 비교할 수 있습니다.</p></div><div class="intro-badge"><span class="badge-icon">⌁</span><span><b>1D INERTIAL FRAME</b><small>관성계 · 진공 · 직선 운동</small></span></div></section>
+
+      <div class="mobile-tabs" role="tablist"><button class="selected" data-panel="controls">실험 설정</button><button data-panel="canvas">시공간 보기</button><button data-panel="insight">관측 결과</button></div>
+
+      <div class="lab-grid">
+        <aside class="panel controls-panel" id="controlsPanel">
+          <div class="panel-heading"><div><p class="eyebrow">01 / CONFIGURATION</p><h2>실험 객체</h2></div><button class="icon-button" id="addObject" aria-label="객체 추가" title="객체 추가">＋</button></div>
+          <p class="section-note">비교할 두 관성계를 준비하세요.</p>
+          <div class="object-list" id="objectList"></div>
+          <div class="add-form" id="addForm" hidden>
+            <div class="field-row"><label>객체 종류<select id="newType"><option value="ship">우주선</option><option value="train">기차</option><option value="observer">관측소</option><option value="photon">광자 펄스</option></select></label><label>이름<input id="newName" maxlength="18" value="우주선 Beta" /></label></div>
+            <div class="field-row"><label>고유 길이 L₀ <span class="unit">m</span><input id="newLength" type="number" min="0" max="10000" value="100" /></label><button class="button primary add-confirm" id="confirmAdd">객체 등록</button></div>
+          </div>
+          <div class="divider"></div>
+          <div class="section-title"><div><span class="section-icon amber">↗</span><h3>속도 조정</h3></div><span class="live-label"><span class="live-dot"></span> LIVE</span></div>
+          <div class="speed-object-label"><span id="editingName">우주선 Alpha</span><b class="mono" id="speedValue">+0.800c</b></div>
+          <input id="speedSlider" class="speed-slider" type="range" min="-0.99" max="0.99" step="0.001" value="0.8" aria-label="우주선 속도" />
+          <div class="slider-scale"><span>−0.99c</span><span>0</span><span>+0.99c</span></div>
+          <div class="preset-row"><button data-speed="0.5">0.50c</button><button data-speed="0.6">0.60c</button><button data-speed="0.8" class="active">0.80c</button><button data-speed="0.866">0.866c</button><button data-speed="0.95">0.95c</button></div>
+          <div class="validation" id="validation"><span>✓</span> 광속 미만의 유효한 속도입니다.</div>
+          <div class="divider"></div>
+          <div class="section-title"><div><span class="section-icon cyan">◎</span><h3>기준 관측자</h3></div><span class="tiny-label">REST FRAME S</span></div>
+          <p class="section-note compact">카드를 선택해 관측 시점을 전환하세요.</p>
+          <div class="observer-picker" id="observerPicker"></div>
+          <button class="button ghost full" id="switchFrame">⇄　관측자 시점 서로 바꾸기</button>
+          <div class="physics-note"><span>ⓘ</span><p>모든 관성계는 동등합니다. 관측자를 바꿔 두 결과가 대칭적인지 확인해 보세요.</p></div>
+        </aside>
+
+        <section class="center-column">
+          <section class="panel canvas-panel" id="canvasPanel">
+            <div class="panel-heading canvas-heading"><div><p class="eyebrow">02 / SPACETIME OBSERVATORY</p><h2>1D 시공간 런웨이</h2></div><div class="canvas-tools"><span class="frame-chip"><i></i><span id="frameLabel">지상 관측소 기준</span></span><button class="icon-button" title="캔버스 초기화" id="resetView">⟳</button></div></div>
+            <div class="runway-wrap"><div class="runway-topline"><span>POSITION <b class="mono">x (m)</b></span><span>SIMULATION TIME <b class="mono" id="clock">00:00.00</b></span></div><div class="runway" id="runway"><div class="grid-glow"></div><div class="axis-line"></div><div class="light-path"><span>c</span></div><div class="axis-ticks" id="axisTicks"></div><div id="shipLane" class="lane"></div><div id="trainLane" class="lane"></div><div id="observerLane" class="lane"></div><div id="photonLane" class="lane"></div><div class="observer-marker" id="observerMarker"><span>YOU</span><i></i></div><div class="runway-caption"><span><i class="key-dot cyan-dot"></i> 관측자 기준계 (정지)</span><span><i class="key-dot amber-dot"></i> 이동 객체</span></div></div></div>
+            <div class="sim-controls"><div class="transport"><button class="play-button" id="playButton"><span>▶</span> 시뮬레이션 실행</button><button class="icon-button" id="resetButton" aria-label="시뮬레이션 리셋">↺</button></div><div class="speed-control"><span>재생 속도</span><button data-rate="0.5">0.5×</button><button data-rate="1" class="active">1×</button><button data-rate="2">2×</button></div></div>
+          </section>
+          <section class="panel diagram-panel" id="theoryPanel"><div class="panel-heading"><div><p class="eyebrow">SPACETIME DIAGRAM</p><h2>민코프스키 시공간</h2></div><span class="tiny-label">ct–x FRAME</span></div><div class="minkowski"><div class="diagram-y">ct</div><div class="diagram-x">x</div><div class="diagram-grid"></div><div class="light-cone left-cone"></div><div class="light-cone right-cone"></div><div class="worldline observer-world"></div><div class="worldline object-world"></div><div class="simultaneity"></div><span class="diagram-label label-light">빛 · x = ct</span><span class="diagram-label label-object">B 세계선</span><span class="diagram-label label-now">동시선</span><div class="diagram-legend"><span><i class="key-dot cyan-dot"></i> 광원뿔</span><span><i class="key-dot amber-dot"></i> 우주선 B</span><span><i class="key-dot"></i> 현재의 동시선</span></div></div></section>
+        </section>
+
+        <aside class="panel insight-panel" id="insightPanel"><div class="panel-heading"><div><p class="eyebrow">03 / RELATIVISTIC READOUT</p><h2>관측 결과</h2></div><span class="result-pulse"></span></div><div class="observer-context"><div class="avatar cyan-avatar" id="observerAvatar">지</div><div><small>현재 기준 관측자</small><b id="observerName">지상 관측소</b></div><span class="observer-tag">기준계 S</span></div>
+          <div class="metrics-grid"><div class="metric-card"><span class="metric-label">상대 속도 <i>vᵣₑₗ</i></span><b class="metric-value amber-text mono" id="relativeSpeed">+0.800c</b><small id="directionText">+x 방향</small><div class="metric-bar"><i id="speedBar"></i></div></div><div class="metric-card"><span class="metric-label">로런츠 인자 <i>γ</i></span><b class="metric-value violet-text mono" id="gammaValue">1.667</b><small>시간 지연 계수</small><div class="metric-bar violet-bar"><i id="gammaBar"></i></div></div><div class="metric-card"><span class="metric-label">관측 길이 <i>L</i></span><b class="metric-value cyan-text mono" id="lengthValue">60.0 <em>m</em></b><small id="lengthDetail">고유 길이 100 m</small><div class="mini-ruler"><i id="lengthRuler"></i></div></div><div class="metric-card"><span class="metric-label">시계 흐름 <i>Δt₀ / Δt</i></span><b class="metric-value green-text mono" id="timeValue">0.600<em>×</em></b><small>이동 객체의 시계</small><div class="clock-mini"><span>YOU</span><i id="clockHands"><b></b></i><span id="clockB">B</span></div></div></div>
+          <div class="narrative"><div class="narrative-mark">✳</div><div><span class="tiny-label">관측 노트</span><p id="narrativeText">지상 관측소 기준에서 우주선 Alpha는 <b>+x 방향으로 0.800c</b> 이동합니다. 우주선의 시계는 <b>0.600배</b> 속도로 흐르고, 길이는 <b>100m에서 60.0m</b>로 수축되어 관측됩니다.</p></div></div>
+          <div class="formula-strip"><span>γ = <span class="mono">1 / √(1 − v²/c²)</span></span><button id="formulaLink">공식 자세히 보기 ↗</button></div>
+          <div class="symmetry-card"><div class="symmetry-head"><span class="section-icon violet">⇄</span><b>상호 대칭성 확인</b></div><p id="symmetryText">관측자를 바꾸면 두 시계가 서로 느리게 흐르는 것처럼 관측됩니다.</p><button id="symmetryButton">우주선 시점으로 전환하기 <span>→</span></button></div>
+          <div class="faq-mini"><span class="tiny-label">QUICK FACT</span><p>“서로의 시간이 느리다면, 누가 더 늙을까요?”</p><button data-view="theory">동시성의 상대성 알아보기 ↗</button></div>
+        </aside>
+      </div>
+      <section class="theory-details" id="formulaDetails"><div class="theory-title"><div><p class="eyebrow">FORMULA LAB</p><h2>상대성 이론, 네 가지 핵심 관계</h2></div><p>관측자와 대상 사이의 상대 속도에서 모든 값이 계산됩니다.</p></div><div class="formula-grid"><article><span>01 · 상대론적 속도 덧셈</span><b class="mono">u = (vB − vA) / (1 − vA vB / c²)</b><p>속도를 단순히 빼지 않고 시공간의 규칙에 따라 합성합니다.</p></article><article><span>02 · 로런츠 인자</span><b class="mono">γ = 1 / √(1 − u²/c²)</b><p>상대 속도에 따른 시공간 효과의 크기를 나타냅니다.</p></article><article><span>03 · 시간 지연</span><b class="mono">Δt = γ Δt₀</b><p>움직이는 시계의 고유 시간은 관측자에게 더 천천히 흐릅니다.</p></article><article><span>04 · 길이 수축</span><b class="mono">L = L₀ / γ</b><p>운동 방향의 길이는 관측자 기준에서 짧아집니다.</p></article></div><div class="faq-grid"><article><span>Q</span><div><b>서로의 시간이 모두 느려질 수 있나요?</b><p>네. 각 관성계는 상대방의 시계를 느리게 측정합니다. 재회해 시계를 직접 비교하려면 가속이나 방향 전환이 필요하고, 그때 두 경로의 고유 시간이 달라집니다.</p></div></article><article><span>Q</span><div><b>빛도 길이 수축을 하나요?</b><p>광자는 질량이 없고 정지계가 없으므로 고유 길이를 갖는 물체처럼 다룰 수 없습니다. 이 실험에서는 광자를 기준 관측자로 선택할 수 없습니다.</p></div></article><article><span>Q</span><div><b>왜 빛의 속도를 넘을 수 없나요?</b><p>질량을 가진 물체의 속도는 어떤 관성계에서도 c보다 작습니다. 속도 슬라이더는 이 경계 안에서만 움직입니다.</p></div></article></div></section>
+      <footer><span>RELATIVITY SPACE LAB</span><span>특수 상대성 이론 인터랙티브 실험실 <i>·</i> 물리학 학습용 모델</span><span>c = 299,792,458 m/s</span></footer>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
